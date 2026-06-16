@@ -61,7 +61,7 @@ def test_evaluate_cv_returns_float(labeled_df):
 
 def test_evaluate_test_returns_float(labeled_df):
     from src.pipeline import split_data
-    train, _, test = split_data(labeled_df)
+    test = split_data(labeled_df)[2]
     pipeline = train_model(labeled_df)
     score = evaluate_test(pipeline, test)
     assert isinstance(score, float)

@@ -26,10 +26,11 @@ def _build_pipeline() -> Pipeline:
 
 
 def _X(df: pd.DataFrame) -> pd.DataFrame:
-    out = df[ALL_FEATURE_COLS].copy()
+    out: pd.DataFrame = df[ALL_FEATURE_COLS].copy()  # type: ignore[assignment]
     out["requires_road_closure"] = out["requires_road_closure"].astype(int)
     for col in CAT_COLS:
-        out[col] = out[col].astype(str).fillna("unknown")
+        col_s: pd.Series = out[col]  # type: ignore[assignment]
+        out[col] = col_s.fillna("unknown").astype(str)
     return out
 
 
@@ -61,7 +62,8 @@ def predict(pipeline: Pipeline, features: dict) -> tuple:
     row = pd.DataFrame([features])
     row["requires_road_closure"] = row["requires_road_closure"].astype(int)
     for col in CAT_COLS:
-        row[col] = row[col].astype(str).fillna("unknown")
+        col_s: pd.Series = row[col]  # type: ignore[assignment]
+        row[col] = col_s.fillna("unknown").astype(str)
     severity   = str(pipeline.predict(row[ALL_FEATURE_COLS])[0])
     proba      = pipeline.predict_proba(row[ALL_FEATURE_COLS])[0]
     confidence = {str(c): float(p) for c, p in zip(pipeline.classes_, proba)}
@@ -77,12 +79,13 @@ def get_knn_neighbors(train_df: pd.DataFrame, query_features: dict, k: int = 5) 
     query_row = pd.DataFrame([query_features])
     query_row["requires_road_closure"] = query_row["requires_road_closure"].astype(int)
     for col in CAT_COLS:
-        query_row[col] = query_row[col].astype(str).fillna("unknown")
+        col_s: pd.Series = query_row[col]  # type: ignore[assignment]
+        query_row[col] = col_s.fillna("unknown").astype(str)
     X_query = enc.transform(query_row[ALL_FEATURE_COLS])
 
     dists = pairwise_distances(X_query, X_train)[0]
     top_k = np.argsort(dists)[:k]
-    result = train_df.iloc[top_k][
+    result: pd.DataFrame = train_df.iloc[top_k][
         ["corridor", "start_datetime", TARGET_COL, "impact_score", "event_cause"]
     ].copy()
     result["distance"] = dists[top_k]

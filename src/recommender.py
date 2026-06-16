@@ -29,11 +29,13 @@ def barricade_positions(train_df: pd.DataFrame, corridor: str, top_n: int = 4) -
         (train_df["corridor"] == corridor) &
         (train_df["requires_road_closure"] == True)  # noqa: E712
     )
-    subset = train_df[mask].dropna(subset=["junction"])
-    subset = subset[subset["junction"] != "unknown"]
+    subset: pd.DataFrame = train_df[mask]  # type: ignore[assignment]
+    subset = subset[subset["junction"].notna()]  # type: ignore[assignment]
+    subset = subset[subset["junction"] != "unknown"]  # type: ignore[assignment]
     if subset.empty:
         return []
-    return subset["junction"].value_counts().head(top_n).index.tolist()
+    junction_col: pd.Series = subset["junction"]  # type: ignore[assignment]
+    return junction_col.value_counts().head(top_n).index.tolist()
 
 
 def build_diversion_graph(
@@ -49,9 +51,10 @@ def build_diversion_graph(
     corridors = train_val_df["corridor"].dropna().unique()
 
     # Per-corridor mean window_count (denominator for normalization)
-    d_means: dict = (
-        train_val_df.groupby("corridor")["window_count"].mean().to_dict()
-    )
+    d_means: dict = {}
+    for corr_key, grp in train_val_df.groupby("corridor"):
+        d_means[corr_key] = float(grp["window_count"].mean())  # type: ignore[arg-type]
+
     global_mean: float = train_val_df["window_count"].mean()  # type: ignore[assignment]
     if not global_mean:
         global_mean = 1.0

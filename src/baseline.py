@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np  # noqa: F401 — kept for future tasks
 
 PRE_WINDOW_H  = 1.0
-POST_WINDOW_H = 2.0
+POST_WINDOW_H = 1.5
 MIN_OBS       = 10
 
 

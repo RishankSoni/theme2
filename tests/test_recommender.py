@@ -43,16 +43,44 @@ def test_officer_count_low_severity():
 
 def test_barricade_positions_top_junctions(sample_df):
     df = _add_features(sample_df)
-    # E6 (CBD 2) has requires_road_closure=TRUE and junction=QueensStatueCircle
-    positions = barricade_positions(df, corridor="CBD 2", top_n=2)
+    # radius_km=1000 → no geospatial filtering → same as old behavior
+    positions = barricade_positions(df, corridor="CBD 2",
+                                    event_lat=12.97, event_lng=77.59,
+                                    radius_km=1000.0, top_n=2)
     assert "QueensStatueCircle" in positions
 
 
 def test_barricade_positions_empty_for_corridor_with_no_closures(sample_df):
     df = _add_features(sample_df)
     df["requires_road_closure"] = False
-    positions = barricade_positions(df, corridor="CBD 2", top_n=2)
+    positions = barricade_positions(df, corridor="CBD 2",
+                                    event_lat=12.97, event_lng=77.59, top_n=2)
     assert positions == []
+
+
+def test_barricade_positions_geospatial_filters_far_junctions():
+    """With 2+ near junctions, far junctions must be excluded."""
+    near_rows = pd.DataFrame({
+        "corridor":              ["CBD 2"] * 4,
+        "requires_road_closure": [True] * 4,
+        "junction":              ["NearA", "NearA", "NearB", "NearB"],
+        "latitude":              [12.97, 12.97, 12.98, 12.98],
+        "longitude":             [77.59, 77.59, 77.60, 77.60],
+    })
+    far_row = pd.DataFrame({
+        "corridor":              ["CBD 2"],
+        "requires_road_closure": [True],
+        "junction":              ["FarJunc"],
+        "latitude":              [10.00],
+        "longitude":             [76.00],
+    })
+    df = pd.concat([near_rows, far_row], ignore_index=True)
+    positions = barricade_positions(df, "CBD 2",
+                                    event_lat=12.97, event_lng=77.59,
+                                    radius_km=2.0, top_n=4)
+    assert "FarJunc" not in positions
+    assert "NearA" in positions
+    assert "NearB" in positions
 
 
 def test_build_diversion_graph_returns_dict(sample_df):

@@ -1,4 +1,5 @@
 # src/recommender.py
+import math
 import pandas as pd
 import numpy as np
 
@@ -23,19 +24,59 @@ def officer_count(severity: str, n_adjacent_junctions: int) -> dict:
     }
 
 
-def barricade_positions(train_df: pd.DataFrame, corridor: str, top_n: int = 4) -> list:
-    """Top junctions most frequently requiring road closure on this corridor."""
+def _haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    R = 6371.0
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlam = math.radians(lng2 - lng1)
+    a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlam / 2) ** 2
+    return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+def barricade_positions(
+    train_df: pd.DataFrame,
+    corridor: str,
+    event_lat: float,
+    event_lng: float,
+    radius_km: float = 2.0,
+    top_n: int = 4,
+) -> list:
+    """Junctions near the event epicenter most frequently requiring road closure."""
     mask = (
-        (train_df["corridor"] == corridor) &
-        (train_df["requires_road_closure"] == True)  # noqa: E712
+        (train_df["corridor"] == corridor)
+        & (train_df["requires_road_closure"] == True)  # noqa: E712
     )
-    subset: pd.DataFrame = train_df[mask]  # type: ignore[assignment]
-    subset = subset[subset["junction"].notna()]  # type: ignore[assignment]
-    subset = subset[subset["junction"] != "unknown"]  # type: ignore[assignment]
+    subset: pd.DataFrame = train_df[mask].copy()
+    subset = subset[subset["junction"].notna()]
+    subset = subset[subset["junction"] != "unknown"]
     if subset.empty:
         return []
-    junction_col: pd.Series = subset["junction"]  # type: ignore[assignment]
-    return junction_col.value_counts().head(top_n).index.tolist()
+
+    junction_centroids = (
+        subset.dropna(subset=["latitude", "longitude"])
+        .groupby("junction")[["latitude", "longitude"]]
+        .mean()
+    )
+
+    def _nearby(r_km: float) -> list:
+        return [
+            junc for junc, row in junction_centroids.iterrows()
+            if _haversine_km(event_lat, event_lng,
+                             float(row["latitude"]), float(row["longitude"])) <= r_km
+        ]
+
+    for candidate_radius in [radius_km, radius_km * 2.5]:
+        survivors = _nearby(candidate_radius)
+        if len(survivors) >= 2:
+            return (
+                subset[subset["junction"].isin(survivors)]["junction"]
+                .value_counts()
+                .head(top_n)
+                .index.tolist()
+            )
+
+    # Fallback: corridor-wide top-N (original behavior)
+    return subset["junction"].value_counts().head(top_n).index.tolist()
 
 
 def build_diversion_graph(

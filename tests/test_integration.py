@@ -75,7 +75,7 @@ def test_end_to_end_cbd2_scenario(trained_state):
     assert severity in {"LOW", "MEDIUM", "HIGH"}
     assert abs(sum(confidence.values()) - 1.0) < 1e-6
 
-    barricades = barricade_positions(train_df, corridor, top_n=4)
+    barricades = barricade_positions(train_df, corridor, event_lat=lat, event_lng=lng, top_n=4)
     n_adj      = min(3, len(barricades))
     officers   = officer_count(severity, n_adjacent_junctions=n_adj)
     assert officers["total_min"] >= 2

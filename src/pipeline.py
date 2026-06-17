@@ -30,6 +30,12 @@ def load_raw(path=DATA_PATH) -> pd.DataFrame:
         .astype(bool)
         .astype(object)
     )
+    df["duration_h"] = (
+        df["closed_datetime"] - df["start_datetime"]
+    ).dt.total_seconds() / 3600
+    df["duration_h"] = df["duration_h"].where(
+        (df["duration_h"] > 0) & (df["duration_h"] <= 24)
+    )
     for col in ["event_cause", "event_type", "corridor", "zone", "police_station", "junction", "priority"]:
         if col in df.columns:
             df[col] = df[col].fillna("unknown")

@@ -102,3 +102,19 @@ def test_corridor_metadata_returns_zone(sample_df):
     assert police == "Cubbon Park"
     assert abs(lat - sample_df[sample_df["corridor"] == "CBD 2"]["latitude"].mean()) < 0.001
     assert abs(lng - sample_df[sample_df["corridor"] == "CBD 2"]["longitude"].mean()) < 0.001
+
+def test_load_raw_has_duration_h():
+    df = load_raw()
+    assert "duration_h" in df.columns
+    valid = df["duration_h"].dropna()
+    assert len(valid) > 0
+    assert (valid > 0).all()
+    assert (valid <= 24).all()
+
+
+def test_load_raw_duration_h_nan_when_no_closed_datetime():
+    df = load_raw()
+    # Rows where closed_datetime is NaT should have NaN duration_h
+    missing_close = df[df["closed_datetime"].isna()]
+    if not missing_close.empty:
+        assert missing_close["duration_h"].isna().all()

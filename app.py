@@ -196,7 +196,7 @@ else:
 
     with right:
         st.markdown("### Impact Map")
-        st_folium(fmap, width=700, height=520, returned_objects=[])
+        st_folium(fmap, width=700, height=520)
 
     st.markdown("---")
     export_rows = [

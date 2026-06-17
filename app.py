@@ -89,6 +89,7 @@ if not st.session_state.show_results:
             default_cause_idx = event_causes.index("public_event") if "public_event" in event_causes else 0
             event_cause = st.selectbox("Event cause", event_causes, index=default_cause_idx)
             corridor    = st.selectbox("Primary corridor", corridors)
+            priority    = st.selectbox("Priority", ["High", "Low"], index=0)
         with col2:
             event_date   = st.date_input("Date", value=datetime.date.today())
             event_time   = st.time_input("Start time", value=datetime.time(18, 0))
@@ -116,6 +117,10 @@ if not st.session_state.show_results:
             "hour_of_day":           hour,
             "day_of_week":           dow,
             "requires_road_closure": road_closure,
+            "priority":              priority,
+            "junction":              "unknown",
+            "month":                 event_date.month,
+            "is_weekend":            int(dow >= 5),
         }
 
         severity, confidence = predict(pipeline, features)
@@ -191,7 +196,7 @@ else:
 
     with right:
         st.markdown("### Impact Map")
-        st_folium(fmap, width=700, height=520)
+        st_folium(fmap, width=700, height=520, returned_objects=[])
 
     st.markdown("---")
     export_rows = [

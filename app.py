@@ -12,6 +12,10 @@ from src.baseline import (
 from src.model import train_model, evaluate_cv, evaluate_test, predict, get_knn_neighbors
 from src.recommender import officer_count, barricade_positions, build_diversion_graph, get_diversions
 from src.map_builder import build_map
+from src.duration_model import (
+    duration_tertile_thresholds, compute_duration_labels,
+    train_duration_model, predict_duration,
+)
 
 st.set_page_config(page_title="Event Congestion Planner", layout="wide")
 
@@ -51,6 +55,10 @@ def load_and_train():
         pd.concat([train_df, val_df], ignore_index=True)
     )
 
+    low_d, high_d = duration_tertile_thresholds(train_df)
+    train_df["duration_label"] = compute_duration_labels(train_df, low_d, high_d)
+    dur_model = train_duration_model(train_df)
+
     return {
         "train_df":        train_df,
         "baselines":       baselines,
@@ -60,6 +68,7 @@ def load_and_train():
         "cv_f1":           cv_f1,
         "test_f1":         test_f1,
         "diversion_graph": diversion_graph,
+        "dur_model":       dur_model,
     }
 
 # ── App state ────────────────────────────────────────────────────────────────
@@ -70,6 +79,7 @@ pipeline        = state["pipeline"]
 diversion_graph = state["diversion_graph"]
 cv_f1           = state["cv_f1"]
 test_f1         = state["test_f1"]
+dur_model       = state["dur_model"]
 
 st.sidebar.markdown("### Model Performance")
 st.sidebar.metric("CV macro-F1 (train)", f"{cv_f1:.3f}")
@@ -135,10 +145,11 @@ if not st.session_state.show_results:
 
         severity, confidence = predict(pipeline, features)
         neighbors            = get_knn_neighbors(train_df, features, k=5)
-        barricades           = barricade_positions(train_df, corridor, top_n=4)
+        barricades           = barricade_positions(train_df, corridor, lat, lng)
         n_adj                = min(3, len(barricades))
         officers             = officer_count(severity, n_adjacent_junctions=n_adj)
-        diversions           = get_diversions(diversion_graph, corridor)
+        diversions           = get_diversions(diversion_graph, corridor, hb)
+        duration             = predict_duration(dur_model, features)
         fmap                 = build_map(lat, lng, severity, barricades, diversions, officers, train_df, event_name)
 
         st.session_state.result_data = {
@@ -151,6 +162,7 @@ if not st.session_state.show_results:
             "diversions": diversions,
             "neighbors":  neighbors,
             "fmap":       fmap,
+            "duration":   duration,
         }
         st.session_state.show_results = True
         st.rerun()
@@ -183,6 +195,17 @@ else:
         st.markdown(f"## {sev_label}")
         st.caption(f"Confidence: {conf_pct:.0f}%  |  Corridor: {r['corridor']}")
 
+        # Duration forecast
+        _low_min  = round(state["dur_model"]["low_thresh"] * 60 / 5) * 5
+        _high_min = round(state["dur_model"]["high_thresh"] * 60 / 5) * 5
+        _DUR_LABELS = {
+            "SHORT":  f"SHORT (<{_low_min} min)",
+            "MEDIUM": f"MEDIUM ({_low_min}–{_high_min} min)",
+            "LONG":   f"LONG (>{_high_min} min)",
+        }
+        _dur = r.get("duration", "N/A")
+        st.markdown(f"**Duration Forecast:** {_DUR_LABELS.get(_dur, _dur)}")
+
         st.markdown("---")
         st.markdown("### Action Plan")
         st.markdown(f"**Officers:** {officers['total_min']}-{officers['total_max']} total")
@@ -214,6 +237,7 @@ else:
         ("Corridor",      r["corridor"]),
         ("Severity",      severity),
         ("Confidence",    f"{conf_pct:.0f}%"),
+        ("Duration",      r.get("duration", "N/A")),
         ("Officers min",  str(officers["total_min"])),
         ("Officers max",  str(officers["total_max"])),
         ("Barricades",    "; ".join(barricades) if barricades else "None"),

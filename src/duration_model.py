@@ -58,7 +58,15 @@ def train_duration_model(train_df: pd.DataFrame) -> dict:
     Returns dict with keys: pipeline, kind, low_thresh, high_thresh.
     kind is one of: 'classifier', 'regressor', 'baseline'.
     """
-    valid = train_df.dropna(subset=["duration_h"]).copy()
+    if "start_datetime" in train_df.columns and "closed_datetime" in train_df.columns:
+        _start = pd.to_datetime(train_df["start_datetime"], utc=True, errors="coerce")
+        _end   = pd.to_datetime(train_df["closed_datetime"], utc=True, errors="coerce")
+        _dur   = (_end - _start).dt.total_seconds() / 3600
+        _dur   = _dur.where((_dur > 0) & (_dur <= 24))
+        df     = train_df.assign(duration_h=_dur)
+    else:
+        df = train_df.copy()
+    valid  = df.dropna(subset=["duration_h"]).copy()
     low_thresh, high_thresh = duration_tertile_thresholds(valid)
     valid["_dur_label"] = compute_duration_labels(valid, low_thresh, high_thresh)
     valid = valid.dropna(subset=["_dur_label"])

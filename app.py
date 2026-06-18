@@ -20,13 +20,17 @@ st.set_page_config(page_title="Event Congestion Planner", layout="wide")
 
 # ── Cached training pipeline ────────────────────────────────────────────────
 
+@st.cache_resource(show_spinner="Loading road network...")
+def _get_road_graph():
+    return load_graph(Path("data/bengaluru_drive.graphml"))
+
+
 @st.cache_data(show_spinner="Loading data and training model...")
 def load_and_train():
     df = load_raw()
     df["window_count"] = compute_window_counts(df)
 
     train_df, val_df, test_df = split_data(df)
-    graph = load_graph(Path("data/bengaluru_drive.graphml"))
 
     baselines = compute_corridor_baselines(train_df)
 
@@ -67,7 +71,6 @@ def load_and_train():
         "test_f1":         test_f1,
         "diversion_graph": diversion_graph,
         "dur_model":       dur_model,
-        "graph":           graph,
     }
 
 # ── App state ────────────────────────────────────────────────────────────────
@@ -79,7 +82,7 @@ diversion_graph = state["diversion_graph"]
 cv_f1           = state["cv_f1"]
 test_f1         = state["test_f1"]
 dur_model       = state["dur_model"]
-graph           = state["graph"]
+graph           = _get_road_graph()
 
 st.sidebar.markdown("### Model Performance")
 st.sidebar.metric("CV macro-F1 (train)", f"{cv_f1:.3f}")

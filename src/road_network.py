@@ -24,6 +24,7 @@ def load_graph(cache_path: Path) -> nx.MultiDiGraph:
     sccs = list(nx.strongly_connected_components(G))
     largest_scc = max(sccs, key=len)
     G = G.subgraph(largest_scc).copy()
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
     ox.save_graphml(G, cache_path)
     return G
 

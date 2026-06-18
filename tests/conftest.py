@@ -34,3 +34,9 @@ def sample_df():
         "priority": ["High", "High", "Low", "High", "Low", "High"],
         "status": ["closed", "closed", "closed", "closed", "closed", "closed"],
     })
+
+@pytest.fixture(scope="session")
+def bengaluru_graph():
+    from src.road_network import load_graph
+    from pathlib import Path
+    return load_graph(Path("data/bengaluru_drive.graphml"))

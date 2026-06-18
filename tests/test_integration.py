@@ -6,6 +6,8 @@ Does not start Streamlit — exercises all four layers directly.
 import pandas as pd
 import pytest
 import folium  # type: ignore[import]
+from pathlib import Path
+
 from src.pipeline import load_raw, split_data, corridor_metadata
 from src.baseline import (
     compute_window_counts, compute_corridor_baselines,
@@ -14,6 +16,7 @@ from src.baseline import (
 from src.model import train_model, evaluate_cv, evaluate_test, predict, get_knn_neighbors
 from src.recommender import officer_count, barricade_positions, build_diversion_graph, get_diversions
 from src.map_builder import build_map
+from src.road_network import load_graph
 
 
 @pytest.fixture(scope="module")
@@ -31,11 +34,13 @@ def trained_state():
     diversion_graph = build_diversion_graph(
         pd.concat([train_df, val_df], ignore_index=True)
     )
+    graph = load_graph(Path("data/bengaluru_drive.graphml"))
     return dict(
         train_df=train_df,
         test_df=test_df,
         pipeline=pipeline,
         diversion_graph=diversion_graph,
+        graph=graph,
     )
 
 
@@ -51,6 +56,7 @@ def test_end_to_end_cbd2_scenario(trained_state):
     train_df        = trained_state["train_df"]
     pipeline        = trained_state["pipeline"]
     diversion_graph = trained_state["diversion_graph"]
+    graph           = trained_state["graph"]
 
     corridor = "CBD 2"
     zone, police, lat, lng = corridor_metadata(train_df, corridor)
@@ -82,7 +88,10 @@ def test_end_to_end_cbd2_scenario(trained_state):
 
     diversions = get_diversions(diversion_graph, corridor, features["hour_band"])
 
-    fmap = build_map(lat, lng, severity, barricades, diversions, officers, train_df, "CBD 2 Rally")
+    fmap = build_map(
+        lat, lng, severity, barricades, diversions, officers,
+        train_df, "CBD 2 Rally", graph,
+    )
     assert isinstance(fmap, folium.Map)
 
     neighbors = get_knn_neighbors(train_df, features, k=5)

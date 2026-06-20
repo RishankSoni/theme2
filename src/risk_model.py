@@ -8,16 +8,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, OrdinalEncoder
 import lightgbm as lgb
 
-from src.model import CAT_COLS, NUM_COLS, _NLP_NUM_COLS
+from src.model import CAT_COLS, NUM_COLS
 
 _RISK_FEATURES: list = CAT_COLS + NUM_COLS  # 20 features
 
 _HIGH_RISK_CAUSES = {"riot", "protest", "procession", "public_event", "vip_movement"}
-
-_NEW_INT_COLS = [
-    "is_holiday", "holiday_risk_tier",
-    "estimated_attendance", "has_vip", "is_route_event",
-]
 
 
 def _to_float(X):

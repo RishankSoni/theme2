@@ -8,3 +8,5 @@ pytest>=8.0.0
 lightgbm>=4.0.0
 osmnx>=2.0.0
 shap
+networkx>=3.0
+lxml>=4.0.0

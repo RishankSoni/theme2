@@ -3,11 +3,7 @@ import pandas as pd
 import streamlit as st
 from streamlit_folium import st_folium
 
-from src.app_cache import load_and_train
-
 st.set_page_config(page_title="Event Congestion Planner — Results", layout="wide")
-
-state = load_and_train()   # hits the cache; no re-training
 
 # ── Guard: redirect if navigated here directly without submitting form ───────
 if "result_data" not in st.session_state:
@@ -27,10 +23,9 @@ risks      = r["risks"]
 
 # ── Sidebar ──────────────────────────────────────────────────────────────────
 st.sidebar.markdown("### Model Performance")
-st.sidebar.metric("CV macro-F1 (train)", f"{state['cv_f1']:.3f}")
-st.sidebar.metric("Test macro-F1",       f"{state['test_f1']:.3f}")
-st.sidebar.metric("Congestion AUC",      f"{state['risk_models']['congestion_auc']:.3f}")
-st.sidebar.metric("Law & Order AUC",     f"{state['risk_models']['law_order_auc']:.3f}")
+st.sidebar.metric("Test macro-F1",  f"{float(r.get('test_f1', 0.0)):.3f}")
+st.sidebar.metric("Congestion AUC", f"{float(r.get('congestion_auc', 0.0)):.3f}")
+st.sidebar.metric("Law & Order AUC", f"{float(r.get('law_order_auc', 0.0)):.3f}")
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.page_link("pages/1_Plan_Event.py", label="← Back to form")
@@ -65,9 +60,8 @@ with left:
     st.caption(f"Confidence: {conf_pct:.0f}%  |  Corridor: {r['corridor']}")
 
     # Duration
-    dur_model  = state["dur_model"]
-    _low_min   = round(dur_model["low_thresh"]  * 60 / 5) * 5
-    _high_min  = round(dur_model["high_thresh"] * 60 / 5) * 5
+    _low_min   = round(float(r.get("dur_low_thresh", 0.0)) * 60 / 5) * 5
+    _high_min  = round(float(r.get("dur_high_thresh", 0.0)) * 60 / 5) * 5
     _DUR_LABELS = {
         "SHORT":  f"SHORT (<{_low_min} min)",
         "MEDIUM": f"MEDIUM ({_low_min}–{_high_min} min)",

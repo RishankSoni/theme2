@@ -3,7 +3,7 @@ import datetime
 
 import streamlit as st
 
-from src.app_cache import get_road_graph, load_and_train
+from src.app_cache import get_model_state, get_road_graph, get_train_df
 from src.calendar_intel import get_holiday_info
 from src.duration_model import predict_duration
 from src.explainer import build_explainers, explain_risk, explain_severity
@@ -15,19 +15,10 @@ from src.risk_model import predict_risks
 
 st.set_page_config(page_title="Event Congestion Planner", layout="wide")
 
-state           = load_and_train()
-train_df        = state["train_df"]
-pipeline        = state["pipeline"]
-dur_model       = state["dur_model"]
-diversion_graph = state["diversion_graph"]
-risk_models     = state["risk_models"]
+train_df = get_train_df()
 
 st.sidebar.markdown("### Model Performance")
-st.sidebar.metric("CV macro-F1 (train)", f"{state['cv_f1']:.3f}")
-st.sidebar.metric("Test macro-F1",       f"{state['test_f1']:.3f}")
-st.sidebar.metric("Congestion AUC",      f"{state['risk_models']['congestion_auc']:.3f}")
-st.sidebar.metric("Law & Order AUC",     f"{state['risk_models']['law_order_auc']:.3f}")
-st.sidebar.caption("Baseline (majority class): ~0.22 on 3-class problem")
+st.sidebar.caption("Models are trained on first prediction and then cached.")
 
 st.title("Event Congestion Planner")
 st.markdown(
@@ -127,6 +118,12 @@ with st.form("event_form"):
     submitted = st.form_submit_button("Predict Impact", type="primary")
 
 if submitted:
+    model_state = get_model_state()
+    pipeline = model_state["pipeline"]
+    dur_model = model_state["dur_model"]
+    diversion_graph = model_state["diversion_graph"]
+    risk_models = model_state["risk_models"]
+
     hour = event_time.hour
     dow  = event_date.weekday()
     if hour < 6:       hb = "night"
@@ -207,5 +204,10 @@ if submitted:
         "estimated_attendance":  int(estimated_attendance),
         "has_vip":               has_vip,
         "is_route_event":        is_route_event,
+        "test_f1":               model_state["test_f1"],
+        "congestion_auc":        model_state["congestion_auc"],
+        "law_order_auc":         model_state["law_order_auc"],
+        "dur_low_thresh":        dur_model["low_thresh"],
+        "dur_high_thresh":       dur_model["high_thresh"],
     }
     st.switch_page("pages/2_Results.py")

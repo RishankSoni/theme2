@@ -9,6 +9,8 @@ from src.baseline import (
 
 def _prepare(sample_df):
     """Add all columns needed for model training."""
+    from src.pipeline import _add_nlp_features
+
     def _hour_to_band(h):
         if h < 6:   return "night"
         if h < 12:  return "morning"
@@ -26,6 +28,11 @@ def _prepare(sample_df):
         df["requires_road_closure"].astype(str).str.upper()
         .map({"TRUE": True, "FALSE": False}).fillna(False)
     )
+    if "authenticated" not in df.columns:
+        df["authenticated"] = 0
+    if "veh_type" not in df.columns:
+        df["veh_type"] = "unknown"
+    df = _add_nlp_features(df)
     df["window_count"] = compute_window_counts(df)
     baselines = compute_corridor_baselines(df, min_obs=1)
     df["impact_score"] = compute_excess_scores(df, baselines)

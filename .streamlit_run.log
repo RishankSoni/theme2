@@ -1,0 +1,219 @@
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://10.176.164.105:8501
+  External URL: http://106.202.51.229:8501
+
++------------------------- Traceback (most recent call last) --------------------------+
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\in |
+| dexes\base.py:3641 in get_loc                                                        |
+|                                                                                      |
+|   3638         """                                                                   |
+|   3639         casted_key = self._maybe_cast_indexer(key)                            |
+|   3640         try:                                                                  |
+| > 3641             return self._engine.get_loc(casted_key)                           |
+|   3642         except KeyError as err:                                               |
+|   3643             if isinstance(casted_key, slice) or (                             |
+|   3644                 isinstance(casted_key, abc.Iterable)                          |
+|                                                                                      |
+| in pandas._libs.index.IndexEngine.get_loc:168                                        |
+|                                                                                      |
+| in pandas._libs.index.IndexEngine.get_loc:197                                        |
+|                                                                                      |
+| in pandas._libs.hashtable.PyObjectHashTable.get_item:7668                            |
+|                                                                                      |
+| in pandas._libs.hashtable.PyObjectHashTable.get_item:7676                            |
++--------------------------------------------------------------------------------------+
+KeyError: 'corridor_auth_rate'
+
+The above exception was the direct cause of the following exception:
+
++------------------------- Traceback (most recent call last) --------------------------+
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\streamlit\runt |
+| ime\scriptrunner\exec_code.py:129 in exec_func_with_error_handling                   |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\streamlit\runt |
+| ime\scriptrunner\script_runner.py:789 in code_to_exec                                |
+|                                                                                      |
+| C:\Users\HP\OneDrive\Desktop\random\theme2\app.py:160 in <module>                    |
+|                                                                                      |
+|   157             "desc_word_count":       0,                                        |
+|   158         }                                                                      |
+|   159                                                                                |
+| > 160         severity, confidence = predict(pipeline, features)                     |
+|   161         neighbors            = get_knn_neighbors(train_df, features, k=5)      |
+|   162         barricades           = barricade_positions(train_df, corridor, lat, ln |
+|   163         n_adj                = min(3, len(barricades))                         |
+|                                                                                      |
+| C:\Users\HP\OneDrive\Desktop\random\theme2\src\model.py:160 in predict               |
+|                                                                                      |
+|   157     day_of_week, requires_road_closure, month, is_weekend.                     |
+|   158     """                                                                        |
+|   159     row = _X(pd.DataFrame([features]))                                         |
+| > 160     severity = str(pipeline.predict(row)[0])                                   |
+|   161     proba = pipeline.predict_proba(row)[0]                                     |
+|   162     confidence = {str(c): float(p) for c, p in zip(pipeline.classes_, proba)}  |
+|   163     return severity, confidence                                                |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\pipeli |
+| ne.py:745 in predict                                                                 |
+|                                                                                      |
+|    742                                                                               |
+|    743         if not _routing_enabled():                                            |
+|    744             for _, name, transform in self._iter(with_final=False):           |
+| >  745                 Xt = transform.transform(Xt)                                  |
+|    746             return self.steps[-1][1].predict(Xt, **params)                    |
+|    747                                                                               |
+|    748         # metadata routing enabled                                            |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\utils\ |
+| _set_output.py:316 in wrapped                                                        |
+|                                                                                      |
+|   313                                                                                |
+|   314     @wraps(f)                                                                  |
+|   315     def wrapped(self, X, *args, **kwargs):                                     |
+| > 316         data_to_wrap = f(self, X, *args, **kwargs)                             |
+|   317         if isinstance(data_to_wrap, tuple):                                    |
+|   318             # only wrap the first output for cross decomposition               |
+|   319             return_tuple = (                                                   |
+|                                                                                      |
+| C:\Users\HP\OneDrive\Desktop\random\theme2\src\model.py:85 in transform              |
+|                                                                                      |
+|    82         out = out.join(self.stats_, on="corridor", how="left")                 |
+|    83         out["corridor_high_rate"] = out["corridor_high_rate"].fillna(self.fall |
+|    84         out["corridor_event_count"] = out["corridor_event_count"].fillna(self. |
+| >  85         out["corridor_auth_rate"] = out["corridor_auth_rate"].fillna(self.fall |
+|    86         out["corridor_closure_rate"] = out["corridor_closure_rate"].fillna(sel |
+|    87         for col in CAT_COLS:                                                   |
+|    88             out[col] = out[col].astype("category")                             |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\fr |
+| ame.py:4378 in __getitem__                                                           |
+|                                                                                      |
+|    4375         if is_single_key:                                                    |
+|    4376             if self.columns.nlevels > 1:                                     |
+|    4377                 return self._getitem_multilevel(key)                         |
+| >  4378             indexer = self.columns.get_loc(key)                              |
+|    4379             if is_integer(indexer):                                          |
+|    4380                 indexer = [indexer]                                          |
+|    4381         else:                                                                |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\in |
+| dexes\base.py:3648 in get_loc                                                        |
+|                                                                                      |
+|   3645                 and any(isinstance(x, slice) for x in casted_key)             |
+|   3646             ):                                                                |
+|   3647                 raise InvalidIndexError(key) from err                         |
+| > 3648             raise KeyError(key) from err                                      |
+|   3649         except TypeError:                                                     |
+|   3650             # If we have a listlike key, _check_indexing_error will raise     |
+|   3651             #  InvalidIndexError. Otherwise we fall through and re-raise      |
++--------------------------------------------------------------------------------------+
+KeyError: 'corridor_auth_rate'
++------------------------- Traceback (most recent call last) --------------------------+
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\in |
+| dexes\base.py:3641 in get_loc                                                        |
+|                                                                                      |
+|   3638         """                                                                   |
+|   3639         casted_key = self._maybe_cast_indexer(key)                            |
+|   3640         try:                                                                  |
+| > 3641             return self._engine.get_loc(casted_key)                           |
+|   3642         except KeyError as err:                                               |
+|   3643             if isinstance(casted_key, slice) or (                             |
+|   3644                 isinstance(casted_key, abc.Iterable)                          |
+|                                                                                      |
+| in pandas._libs.index.IndexEngine.get_loc:168                                        |
+|                                                                                      |
+| in pandas._libs.index.IndexEngine.get_loc:197                                        |
+|                                                                                      |
+| in pandas._libs.hashtable.PyObjectHashTable.get_item:7668                            |
+|                                                                                      |
+| in pandas._libs.hashtable.PyObjectHashTable.get_item:7676                            |
++--------------------------------------------------------------------------------------+
+KeyError: 'corridor_auth_rate'
+
+The above exception was the direct cause of the following exception:
+
++------------------------- Traceback (most recent call last) --------------------------+
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\streamlit\runt |
+| ime\scriptrunner\exec_code.py:129 in exec_func_with_error_handling                   |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\streamlit\runt |
+| ime\scriptrunner\script_runner.py:789 in code_to_exec                                |
+|                                                                                      |
+| C:\Users\HP\OneDrive\Desktop\random\theme2\app.py:160 in <module>                    |
+|                                                                                      |
+|   157             "desc_word_count":       0,                                        |
+|   158         }                                                                      |
+|   159                                                                                |
+| > 160         severity, confidence = predict(pipeline, features)                     |
+|   161         neighbors            = get_knn_neighbors(train_df, features, k=5)      |
+|   162         barricades           = barricade_positions(train_df, corridor, lat, ln |
+|   163         n_adj                = min(3, len(barricades))                         |
+|                                                                                      |
+| C:\Users\HP\OneDrive\Desktop\random\theme2\src\model.py:160 in predict               |
+|                                                                                      |
+|   157     day_of_week, requires_road_closure, month, is_weekend.                     |
+|   158     """                                                                        |
+|   159     row = _X(pd.DataFrame([features]))                                         |
+| > 160     severity = str(pipeline.predict(row)[0])                                   |
+|   161     proba = pipeline.predict_proba(row)[0]                                     |
+|   162     confidence = {str(c): float(p) for c, p in zip(pipeline.classes_, proba)}  |
+|   163     return severity, confidence                                                |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\pipeli |
+| ne.py:745 in predict                                                                 |
+|                                                                                      |
+|    742                                                                               |
+|    743         if not _routing_enabled():                                            |
+|    744             for _, name, transform in self._iter(with_final=False):           |
+| >  745                 Xt = transform.transform(Xt)                                  |
+|    746             return self.steps[-1][1].predict(Xt, **params)                    |
+|    747                                                                               |
+|    748         # metadata routing enabled                                            |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\utils\ |
+| _set_output.py:316 in wrapped                                                        |
+|                                                                                      |
+|   313                                                                                |
+|   314     @wraps(f)                                                                  |
+|   315     def wrapped(self, X, *args, **kwargs):                                     |
+| > 316         data_to_wrap = f(self, X, *args, **kwargs)                             |
+|   317         if isinstance(data_to_wrap, tuple):                                    |
+|   318             # only wrap the first output for cross decomposition               |
+|   319             return_tuple = (                                                   |
+|                                                                                      |
+| C:\Users\HP\OneDrive\Desktop\random\theme2\src\model.py:85 in transform              |
+|                                                                                      |
+|    82         out = out.join(self.stats_, on="corridor", how="left")                 |
+|    83         out["corridor_high_rate"] = out["corridor_high_rate"].fillna(self.fall |
+|    84         out["corridor_event_count"] = out["corridor_event_count"].fillna(self. |
+| >  85         out["corridor_auth_rate"] = out["corridor_auth_rate"].fillna(self.fall |
+|    86         out["corridor_closure_rate"] = out["corridor_closure_rate"].fillna(sel |
+|    87         for col in CAT_COLS:                                                   |
+|    88             out[col] = out[col].astype("category")                             |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\fr |
+| ame.py:4378 in __getitem__                                                           |
+|                                                                                      |
+|    4375         if is_single_key:                                                    |
+|    4376             if self.columns.nlevels > 1:                                     |
+|    4377                 return self._getitem_multilevel(key)                         |
+| >  4378             indexer = self.columns.get_loc(key)                              |
+|    4379             if is_integer(indexer):                                          |
+|    4380                 indexer = [indexer]                                          |
+|    4381         else:                                                                |
+|                                                                                      |
+| C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\in |
+| dexes\base.py:3648 in get_loc                                                        |
+|                                                                                      |
+|   3645                 and any(isinstance(x, slice) for x in casted_key)             |
+|   3646             ):                                                                |
+|   3647                 raise InvalidIndexError(key) from err                         |
+| > 3648             raise KeyError(key) from err                                      |
+|   3649         except TypeError:                                                     |
+|   3650             # If we have a listlike key, _check_indexing_error will raise     |
+|   3651             #  InvalidIndexError. Otherwise we fall through and re-raise      |
++--------------------------------------------------------------------------------------+
+KeyError: 'corridor_auth_rate'

@@ -1,0 +1,52 @@
+2026-06-18 12:14:21.024 Uvicorn server started on 0.0.0.0:8501
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.6.3) or chardet (7.4.3)/charset_normalizer (3.4.4) doesn't match a supported version!
+  warnings.warn(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2137: UserWarning: categorical_feature keyword has been found in `params` and will be ignored.
+Please use categorical_feature argument of the Dataset constructor to pass this parameter.
+  _log_warning(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2159: UserWarning: categorical_feature in param dict is overridden.
+  _log_warning(f"{cat_alias} in param dict is overridden.")
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2137: UserWarning: categorical_feature keyword has been found in `params` and will be ignored.
+Please use categorical_feature argument of the Dataset constructor to pass this parameter.
+  _log_warning(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2159: UserWarning: categorical_feature in param dict is overridden.
+  _log_warning(f"{cat_alias} in param dict is overridden.")
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2137: UserWarning: categorical_feature keyword has been found in `params` and will be ignored.
+Please use categorical_feature argument of the Dataset constructor to pass this parameter.
+  _log_warning(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2159: UserWarning: categorical_feature in param dict is overridden.
+  _log_warning(f"{cat_alias} in param dict is overridden.")
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2137: UserWarning: categorical_feature keyword has been found in `params` and will be ignored.
+Please use categorical_feature argument of the Dataset constructor to pass this parameter.
+  _log_warning(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2159: UserWarning: categorical_feature in param dict is overridden.
+  _log_warning(f"{cat_alias} in param dict is overridden.")
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2137: UserWarning: categorical_feature keyword has been found in `params` and will be ignored.
+Please use categorical_feature argument of the Dataset constructor to pass this parameter.
+  _log_warning(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2159: UserWarning: categorical_feature in param dict is overridden.
+  _log_warning(f"{cat_alias} in param dict is overridden.")
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2137: UserWarning: categorical_feature keyword has been found in `params` and will be ignored.
+Please use categorical_feature argument of the Dataset constructor to pass this parameter.
+  _log_warning(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2159: UserWarning: categorical_feature in param dict is overridden.
+  _log_warning(f"{cat_alias} in param dict is overridden.")
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\utils\validation.py:2691: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+  warnings.warn(
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\utils\validation.py:2691: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+2026-06-18 12:16:00.981 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-06-18 12:16:55.834 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-06-18 12:18:17.623 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.

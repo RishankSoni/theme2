@@ -1,0 +1,94 @@
+..................................................FFF.....               [100%]
+================================== FAILURES ===================================
+______________________ test_load_graph_saves_and_reloads ______________________
+tests\test_road_network.py:13: in test_load_graph_saves_and_reloads
+    G2 = load_graph(cache)
+         ^^^^^^^^^^^^^^^^^
+src\road_network.py:22: in load_graph
+    return ox.load_graphml(cache_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\osmnx\io.py:217: in load_graphml
+    G = nx.read_graphml(
+<class 'networkx.utils.decorators.argmap'> compilation 6:5: in argmap_read_graphml_1
+    ???
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\networkx\utils\backends.py:551: in _call_if_no_backends_installed
+    return self.orig_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\networkx\readwrite\graphml.py:297: in read_graphml
+    glist = list(reader(path=path))
+            ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\networkx\readwrite\graphml.py:860: in __call__
+    yield self.make_graph(g, keys, defaults)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\networkx\readwrite\graphml.py:890: in make_graph
+    self.add_edge(G, edge_xml, graphml_keys)
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\networkx\readwrite\graphml.py:945: in add_edge
+    self.edge_ids[source, target] = edge_id
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   MemoryError
+________________________ test_nearest_node_returns_int ________________________
+tests\test_road_network.py:18: in test_nearest_node_returns_int
+    node = nearest_node(bengaluru_graph, lat=12.97, lng=77.59)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\road_network.py:37: in nearest_node
+    return int(ox.distance.nearest_nodes(G, X=lng, Y=lat))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\osmnx\distance.py:360: in nearest_nodes
+    nodes = convert.graph_to_gdfs(G, edges=False, node_geometry=False)[["x", "y"]]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\osmnx\convert.py:208: in graph_to_gdfs
+    uvk, data = zip(*G.nodes(data=True), strict=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   MemoryError
+_________________________ test_nearest_node_in_graph __________________________
+tests\test_road_network.py:23: in test_nearest_node_in_graph
+    node = nearest_node(bengaluru_graph, lat=12.97, lng=77.59)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\road_network.py:37: in nearest_node
+    return int(ox.distance.nearest_nodes(G, X=lng, Y=lat))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\osmnx\distance.py:360: in nearest_nodes
+    nodes = convert.graph_to_gdfs(G, edges=False, node_geometry=False)[["x", "y"]]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\osmnx\convert.py:208: in graph_to_gdfs
+    uvk, data = zip(*G.nodes(data=True), strict=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   MemoryError
+============================== warnings summary ===============================
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\__init__.py:113
+  C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.6.3) or chardet (7.4.3)/charset_normalizer (3.4.4) doesn't match a supported version!
+    warnings.warn(
+
+tests/test_duration_model.py::test_train_duration_model_returns_valid_dict
+tests/test_duration_model.py::test_predict_duration_returns_valid_label
+tests/test_duration_model.py::test_predict_duration_handles_unseen_corridor
+  C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\utils\validation.py:2691: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+    warnings.warn(
+
+tests/test_duration_model.py::test_train_duration_model_returns_valid_dict
+tests/test_duration_model.py::test_predict_duration_returns_valid_label
+tests/test_duration_model.py::test_predict_duration_returns_valid_label
+tests/test_duration_model.py::test_predict_duration_handles_unseen_corridor
+tests/test_duration_model.py::test_predict_duration_handles_unseen_corridor
+  C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\utils\validation.py:2691: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+    warnings.warn(
+
+tests/test_integration.py: 1 warning
+tests/test_model.py: 8 warnings
+tests/test_tuner.py: 10 warnings
+  C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2137: UserWarning: categorical_feature keyword has been found in `params` and will be ignored.
+  Please use categorical_feature argument of the Dataset constructor to pass this parameter.
+    _log_warning(
+
+tests/test_integration.py: 1 warning
+tests/test_model.py: 8 warnings
+tests/test_tuner.py: 10 warnings
+  C:\Users\HP\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightgbm\basic.py:2159: UserWarning: categorical_feature in param dict is overridden.
+    _log_warning(f"{cat_alias} in param dict is overridden.")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_road_network.py::test_load_graph_saves_and_reloads - Memory...
+FAILED tests/test_road_network.py::test_nearest_node_returns_int - MemoryError
+FAILED tests/test_road_network.py::test_nearest_node_in_graph - MemoryError
+3 failed, 55 passed, 47 warnings in 405.95s (0:06:45)

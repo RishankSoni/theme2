@@ -1,0 +1,81 @@
+<h2>Dashboard Layout Options</h2>
+<p class="subtitle">How should the Results screen be arranged? Pick the layout that best fits a control-room demo.</p>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Map-First (Stacked)</h3>
+      <p>Full-width interactive map at the top. Severity badge, action plan table, and evidence panel below in a two-column row.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Results Screen</div>
+        <div class="mockup-body" style="padding:8px;font-size:11px">
+          <div style="background:#dbeafe;border-radius:4px;height:100px;display:flex;align-items:center;justify-content:center;color:#1e40af;font-weight:600;margin-bottom:8px">🗺 Folium Map — full width</div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:#fef9c3;border-radius:4px;padding:6px;text-align:center;font-size:10px"><strong>HIGH</strong><br/>Severity Badge<br/><span style="color:#888">+ confidence %</span></div>
+            <div style="flex:2;background:#f0fdf4;border-radius:4px;padding:6px;font-size:10px"><strong>Action Plan</strong><br/>👮 10 officers · 4 barricades<br/>↩ Divert via Bellary Rd 2</div>
+            <div style="flex:2;background:#faf5ff;border-radius:4px;padding:6px;font-size:10px"><strong>5 Similar Events</strong><br/>Evidence panel</div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Map is the hero</li><li>Familiar top-down layout</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Must scroll to see plan + map together</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Split-Pane (Recommended)</h3>
+      <p>Left sidebar: severity badge, action plan, evidence. Right pane: large Folium map, always visible alongside the plan.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Results Screen</div>
+        <div class="mockup-body" style="padding:8px;font-size:11px">
+          <div style="display:flex;gap:8px;height:140px">
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <div style="background:#fef9c3;border-radius:4px;padding:5px;text-align:center;font-size:10px"><strong>HIGH</strong> · 78% confidence</div>
+              <div style="background:#f0fdf4;border-radius:4px;padding:5px;font-size:10px;flex:1"><strong>Action Plan</strong><br/>👮 10 officers<br/>🚧 4 barricades<br/>↩ 2 diversions</div>
+              <div style="background:#faf5ff;border-radius:4px;padding:5px;font-size:10px"><strong>5 Similar Events</strong></div>
+            </div>
+            <div style="flex:2;background:#dbeafe;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#1e40af;font-weight:600;font-size:12px">🗺 Folium Map<br/><span style="font-size:10px;font-weight:400">impact zones · officer pins · diversions</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Plan and map visible simultaneously</li><li>Judges see everything at once</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Sidebar can feel cramped on small screens</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Tabbed (Three Panels)</h3>
+      <p>Tab 1: Severity + evidence. Tab 2: Full-screen map. Tab 3: Detailed action plan. Navigate between views.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Results Screen</div>
+        <div class="mockup-body" style="padding:8px;font-size:11px">
+          <div style="display:flex;gap:4px;margin-bottom:6px">
+            <div style="background:#3b82f6;color:white;border-radius:3px;padding:3px 8px;font-size:10px">Prediction</div>
+            <div style="background:#e5e7eb;border-radius:3px;padding:3px 8px;font-size:10px;color:#555">Map View</div>
+            <div style="background:#e5e7eb;border-radius:3px;padding:3px 8px;font-size:10px;color:#555">Action Plan</div>
+          </div>
+          <div style="background:#fef9c3;border-radius:4px;padding:8px;height:80px;font-size:10px">
+            <strong>HIGH Impact · 78% confidence</strong><br/>
+            Based on 5 similar events on Tumkur Rd, Mon 18:00–20:00<br/>
+            Avg excess incidents: +6.2 above baseline
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Each view gets full screen</li><li>Clean, uncluttered</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Judges must click through — weaker for live demos</li><li>Plan and map never visible together</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>

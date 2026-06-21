@@ -1,0 +1,313 @@
+BENGALURU TRAFFIC INCIDENT — EDA REPORT
+Generated from 8173 records
+
+============================================================
+DATA QUALITY SUMMARY
+============================================================
+Total records : 8173
+Total columns : 76
+
+Null counts (top 20 columns by nulls):
+  meta_data                            100.0% null
+  comment                              100.0% null
+  map_file                             100.0% null
+  direction                             99.5% null
+  resolved_by_id                        99.1% null
+  resolved_at_longitude                 99.1% null
+  resolved_at_latitude                  99.1% null
+  resolved_datetime                     99.1% null
+  resolved_at_address                   99.1% null
+  citizen_accident_id                   98.4% null
+  assigned_to_police_id                 98.4% null
+  route_path                            98.3% null
+  cargo_material                        96.6% null
+  age_of_truck                          96.6% null
+  reason_breakdown                      96.6% null
+  end_datetime                          94.2% null
+  end_address                           91.6% null
+  endlatitude                           91.6% null
+  endlongitude                          91.6% null
+  junction                              69.3% null
+
+Status distribution:
+  closed                     7095  (86.8%)
+  active                     1007  (12.3%)
+  resolved                     71  (0.9%)
+
+Event type distribution:
+  unplanned                  7706  (94.3%)
+  planned                     467  (5.7%)
+
+Event cause distribution:
+  vehicle_breakdown          4896  (59.9%)
+  others                      638  (7.8%)
+  pot_holes                   537  (6.6%)
+  construction                480  (5.9%)
+  water_logging               458  (5.6%)
+  accident                    365  (4.5%)
+  tree_fall                   284  (3.5%)
+  road_conditions             170  (2.1%)
+  congestion                  136  (1.7%)
+  public_event                 84  (1.0%)
+  procession                   72  (0.9%)
+  vip_movement                 20  (0.2%)
+  protest                      15  (0.2%)
+  Debris                       12  (0.1%)
+  test_demo                     3  (0.0%)
+  Fog / Low Visibility          2  (0.0%)
+  debris                        1  (0.0%)
+
+Resolution time (minutes):
+  Count  : 3195
+  Mean   : 379.3
+  Median : 64.4
+  Std    : 575.5
+  P25    : 28.0
+  P75    : 327.4
+  P90    : 1440.0
+
+
+============================================================
+SPATIAL HOTSPOTS
+============================================================
+
+Top zones:
+  Central Zone 2                            623
+  West Zone 1                               433
+  North Zone 2                              413
+  West Zone 2                               358
+  South Zone 2                              354
+  North Zone 1                              318
+  Central Zone 1                            269
+  East Zone 1                               253
+  South Zone 1                              233
+  East Zone 2                               190
+
+Top junctions:
+  MekhriCircle                               64
+  AyyappaTempleJunc                          49
+  SatteliteBusStandJunc                      43
+  YeshwanthpuraCircle                        38
+  YelhankaCircle                             34
+  SilkBoardJunc                              33
+  toll gate mysore road                      33
+  JalahalliCross(SM Circle)                  32
+  Nagavara-ORR Junction                      32
+  K R Circle                                 31
+  KIMCO Junction                             31
+  VeerannapalyaJunction(BEL,HO)              30
+  TownhallJunction                           30
+  HesaraghattaJunction                       30
+  Devasandra(k r puram)                      30
+
+Corridors:
+  Non-corridor                             3124
+  Mysore Road                               743
+  Bellary Road 1                            610
+  Tumkur Road                               458
+  Bellary Road 2                            379
+  Hosur Road                                298
+  ORR North 1                               275
+  Old Madras Road                           263
+  Magadi Road                               245
+  ORR East 1                                244
+  ORR North 2                               235
+  Bannerghata Road                          209
+  ORR East 2                                187
+  West of Chord Road                        174
+  ORR West 1                                168
+
+============================================================
+DESCRIPTION NLP ANALYSIS
+============================================================
+
+Language distribution:
+  en            4197  (51.4%)
+  empty         1360  (16.6%)
+  kn             822  (10.1%)
+  no             274  (3.4%)
+  af             144  (1.8%)
+  ca             137  (1.7%)
+  it             128  (1.6%)
+  pl             117  (1.4%)
+  tl             115  (1.4%)
+  ro             100  (1.2%)
+  nl              87  (1.1%)
+  id              74  (0.9%)
+  es              74  (0.9%)
+  fr              74  (0.9%)
+  unknown         64  (0.8%)
+  de              60  (0.7%)
+  et              50  (0.6%)
+  so              38  (0.5%)
+  cy              35  (0.4%)
+  cs              33  (0.4%)
+  pt              27  (0.3%)
+  vi              22  (0.3%)
+  sv              22  (0.3%)
+  sl              21  (0.3%)
+  da              20  (0.2%)
+  tr              18  (0.2%)
+  lt              15  (0.2%)
+  sw              13  (0.2%)
+  fi               9  (0.1%)
+  sk               7  (0.1%)
+  hr               7  (0.1%)
+  sq               5  (0.1%)
+  hu               2  (0.0%)
+  ko               1  (0.0%)
+  lv               1  (0.0%)
+
+Word count (non-empty descriptions):
+  Mean   : 7.8
+  Median : 6.0
+  Max    : 55
+
+Top 20 words in descriptions (after normalization):
+  sir                        2394
+  traffic                    1647
+  towards                    1497
+  road                       1452
+  problem                    1360
+  vehicle                     994
+  slow                        799
+  due                         698
+  sar                         675
+  near                        615
+  movement                    613
+  bus                         611
+  off                         604
+  starting                    550
+  side                        530
+  junction                    480
+  work                        463
+  moving                      446
+  down                        358
+  bmtc                        330
+
+Topic clusters (TF-IDF + KMeans):
+  T0 (4512 incidents): sar | vehicle | breakdown | wheel | junction
+  T1 (909 incidents): road | main | sir | near | bus
+  T2 (901 incidents): slow | traffic | movement | traffic slow | slow movement
+  T3 (1126 incidents): sir | traffic | problem | problem sir | traffic problem
+  T4 (253 incidents): break | vehicle break | vehicle | sir | bus break
+  T5 (472 incidents): problem | starting | starting problem | problem sir | sir
+
+Keyword flag hit rates:
+  breakdown             21.6% of incidents
+  accident               2.4% of incidents
+  waterlogging           4.0% of incidents
+  tree_fall              1.7% of incidents
+  road_block             0.6% of incidents
+  construction           7.4% of incidents
+  traffic_slow          25.1% of incidents
+  event                  0.7% of incidents
+  vehicle_type          12.4% of incidents
+  location_ref          28.0% of incidents
+  severity_high          0.0% of incidents
+
+============================================================
+ML READINESS ASSESSMENT
+============================================================
+
+Feature                        Role                                  Fill %
+------------------------------------------------------------------------------
+  resolution_minutes           Target / reward proxy                 39.1%  △
+  event_cause                  Feature — incident type              100.0%  ✓
+  hour                         Feature — time of day                 98.6%  ✓
+  day_of_week                  Feature — weekday                     98.6%  ✓
+  latitude                     Feature — location                   100.0%  ✓
+  longitude                    Feature — location                   100.0%  ✓
+  priority                     Feature — severity                   100.0%  ✓
+  corridor                     Feature — road importance             99.8%  ✓
+  zone                         Feature — geography                   42.1%  △
+  junction                     Feature — geography                   30.7%  △
+  requires_road_closure        Feature — impact flag                100.0%  ✓
+  veh_type                     Feature — vehicle type                59.8%  △
+  desc_word_count              Feature — description length         100.0%  ✓
+  desc_lang                    Feature — language of report         100.0%  ✓
+  desc_breakdown               Feature — NLP: breakdown mention     100.0%  ✓
+  desc_traffic_slow            Feature — NLP: congestion mention    100.0%  ✓
+  desc_waterlogging            Feature — NLP: flooding mention      100.0%  ✓
+  desc_road_block              Feature — NLP: road block mention    100.0%  ✓
+  desc_severity_high           Feature — NLP: severity signal       100.0%  ✓
+  desc_topic                   Feature — NLP: topic cluster         100.0%  ✓
+
+Missing for RL (action columns):
+  ✗  officers_deployed      — not in dataset
+  ✗  diversion_route_used   — not in dataset
+  ✗  barricades_placed      — not in dataset
+
+Recommendation:
+  1. Use description NLP flags as extra features in a severity predictor.
+  2. Use topic clusters to stratify synthetic data generation.
+  3. Build action space from domain knowledge + synthetic data.
+
+============================================================
+SYNTHETIC DATA GENERATION PROFILE
+============================================================
+Statistical profiles to drive realistic synthetic data:
+
+event_cause probabilities:
+  vehicle_breakdown         59.9%
+  others                    7.8%
+  pot_holes                 6.6%
+  construction              5.9%
+  water_logging             5.6%
+  accident                  4.5%
+  tree_fall                 3.5%
+  road_conditions           2.1%
+  congestion                1.7%
+  public_event              1.0%
+  procession                0.9%
+  vip_movement              0.2%
+  protest                   0.2%
+  Debris                    0.1%
+  test_demo                 0.0%
+  Fog / Low Visibility      0.0%
+  debris                    0.0%
+
+resolution_minutes — Log-normal fit:
+  log-mean=4.526, log-std=1.760
+  Sample: np.random.lognormal(4.526, 1.760)
+
+priority probabilities:
+  High       61.6%
+  Low        38.4%
+
+description language probabilities:
+  en         51.4%
+  empty      16.6%
+  kn         10.1%
+  no         3.4%
+  af         1.8%
+  ca         1.7%
+  it         1.6%
+  pl         1.4%
+  tl         1.4%
+  ro         1.2%
+  nl         1.1%
+  id         0.9%
+  es         0.9%
+  fr         0.9%
+  unknown    0.8%
+  de         0.7%
+  et         0.6%
+  so         0.5%
+  cy         0.4%
+  cs         0.4%
+  pt         0.3%
+  vi         0.3%
+  sv         0.3%
+  sl         0.3%
+  da         0.2%
+  tr         0.2%
+  lt         0.2%
+  sw         0.2%
+  fi         0.1%
+  sk         0.1%
+  hr         0.1%
+  sq         0.1%
+  hu         0.0%
+  ko         0.0%
+  lv         0.0%

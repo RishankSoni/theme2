@@ -33,6 +33,17 @@ def sample_df():
         "requires_road_closure": ["FALSE", "FALSE", "FALSE", "TRUE", "FALSE", "TRUE"],
         "priority": ["High", "High", "Low", "High", "Low", "High"],
         "status": ["closed", "closed", "closed", "closed", "closed", "closed"],
+        # EDA-derived columns
+        "authenticated": [1, 0, 1, 1, 0, 1],
+        "veh_type": ["heavy_vehicle", "lcv", "unknown", "unknown", "heavy_vehicle", "private_bus"],
+        "description": [
+            "traffic slow movement near junction",
+            "vehicle breakdown on road",
+            "accident near signal heavy traffic",
+            "road block due to construction work",
+            "tree fall on road slow movement",
+            "traffic jam starting problem sir",
+        ],
     })
 
 @pytest.fixture(scope="session")

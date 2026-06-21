@@ -10,7 +10,6 @@ from src.baseline import (
     compute_tertile_thresholds, compute_window_counts, label_severity,
 )
 from src.duration_model import train_duration_model
-from src.explainer import build_explainers
 from src.model import evaluate_cv, evaluate_test, train_model
 from src.pipeline import load_raw, split_data
 from src.recommender import build_diversion_graph
@@ -57,7 +56,6 @@ def load_and_train() -> dict:
     )
     dur_model   = train_duration_model(train_df)
     risk_models = train_risk_models(train_df)
-    explainers  = build_explainers(pipeline, risk_models)
 
     return {
         "train_df":        train_df,
@@ -70,7 +68,6 @@ def load_and_train() -> dict:
         "diversion_graph": diversion_graph,
         "dur_model":       dur_model,
         "risk_models":     risk_models,
-        "explainers":      explainers,
         "congestion_auc":  risk_models["congestion_auc"],
         "law_order_auc":   risk_models["law_order_auc"],
     }

@@ -6,7 +6,7 @@ import streamlit as st
 from src.app_cache import get_road_graph, load_and_train
 from src.calendar_intel import get_holiday_info
 from src.duration_model import predict_duration
-from src.explainer import explain_risk, explain_severity
+from src.explainer import build_explainers, explain_risk, explain_severity
 from src.map_builder import build_map
 from src.model import get_knn_neighbors, predict
 from src.pipeline import corridor_metadata
@@ -16,13 +16,11 @@ from src.risk_model import predict_risks
 st.set_page_config(page_title="Event Congestion Planner", layout="wide")
 
 state           = load_and_train()
-graph           = get_road_graph()
 train_df        = state["train_df"]
 pipeline        = state["pipeline"]
 dur_model       = state["dur_model"]
 diversion_graph = state["diversion_graph"]
 risk_models     = state["risk_models"]
-explainers      = state["explainers"]
 
 st.sidebar.markdown("### Model Performance")
 st.sidebar.metric("CV macro-F1 (train)", f"{state['cv_f1']:.3f}")
@@ -164,20 +162,27 @@ if submitted:
     severity, confidence = predict(pipeline, features)
     duration             = predict_duration(dur_model, features)
     risks                = predict_risks(risk_models, features)
-    shap_sev             = explain_severity(
-        explainers["severity"], pipeline, features, severity
-    )
-    shap_cong            = explain_risk(
-        explainers["congestion"], risk_models["congestion"], features
-    )
-    shap_law             = explain_risk(
-        explainers["law_order"], risk_models["law_order"], features
-    )
+
+    shap_sev: list[dict] = []
+    shap_cong: list[dict] = []
+    shap_law: list[dict] = []
+    try:
+        explainers = build_explainers(pipeline, risk_models)
+        shap_sev = explain_severity(explainers["severity"], pipeline, features, severity)
+        shap_cong = explain_risk(explainers["congestion"], risk_models["congestion"], features)
+        shap_law = explain_risk(explainers["law_order"], risk_models["law_order"], features)
+    except Exception:
+        # Keep app usable when SHAP fails on hosted runtimes.
+        pass
+
     neighbors  = get_knn_neighbors(train_df, features, k=5)
     barricades = barricade_positions(train_df, corridor, lat, lng)
     n_adj      = min(3, len(barricades))
     officers   = officer_count(severity, n_adjacent_junctions=n_adj)
     diversions = get_diversions(diversion_graph, corridor, hb)
+
+    with st.spinner("Loading road network for map..."):
+        graph = get_road_graph()
     fmap       = build_map(
         lat, lng, severity, barricades, diversions,
         officers, train_df, event_name, graph, corridor=corridor

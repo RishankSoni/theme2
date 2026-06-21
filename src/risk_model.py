@@ -67,7 +67,7 @@ def train_risk_models(train_df: pd.DataFrame) -> dict:
     pipe_cong_eval = Pipeline([
         ("pre", _make_preprocessor()),
         ("clf", lgb.LGBMClassifier(
-            class_weight="balanced", random_state=42, n_jobs=-1, verbose=-1
+            class_weight="balanced", random_state=42, n_jobs=1, verbose=-1
         )),
     ])
     pipe_cong_eval.fit(X_tr, yc_tr)
@@ -76,7 +76,7 @@ def train_risk_models(train_df: pd.DataFrame) -> dict:
     pipe_law_eval = Pipeline([
         ("pre", _make_preprocessor()),
         ("clf", lgb.LGBMClassifier(
-            class_weight="balanced", random_state=42, n_jobs=-1, verbose=-1
+            class_weight="balanced", random_state=42, n_jobs=1, verbose=-1
         )),
     ])
     pipe_law_eval.fit(X_tr, yl_tr)
@@ -86,7 +86,7 @@ def train_risk_models(train_df: pd.DataFrame) -> dict:
     pipe_cong = Pipeline([
         ("pre", _make_preprocessor()),
         ("clf", lgb.LGBMClassifier(
-            class_weight="balanced", random_state=42, n_jobs=-1, verbose=-1
+            class_weight="balanced", random_state=42, n_jobs=1, verbose=-1
         )),
     ])
     pipe_cong.fit(X, y_cong)
@@ -94,7 +94,7 @@ def train_risk_models(train_df: pd.DataFrame) -> dict:
     pipe_law = Pipeline([
         ("pre", _make_preprocessor()),
         ("clf", lgb.LGBMClassifier(
-            class_weight="balanced", random_state=42, n_jobs=-1, verbose=-1
+            class_weight="balanced", random_state=42, n_jobs=1, verbose=-1
         )),
     ])
     pipe_law.fit(X, y_law)

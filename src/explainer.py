@@ -1,8 +1,9 @@
 # src/explainer.py
 import warnings
+from typing import Any
+
 import numpy as np
 import pandas as pd
-import shap
 from sklearn.pipeline import Pipeline
 
 FEATURE_DISPLAY: dict[str, str] = {
@@ -33,8 +34,15 @@ FEATURE_DISPLAY: dict[str, str] = {
 }
 
 
+def _import_shap() -> Any:
+    # Import SHAP lazily to avoid heavy startup cost and runtime incompatibility crashes.
+    import shap
+    return shap
+
+
 def build_explainers(severity_pipeline: Pipeline, risk_models: dict) -> dict:
     """Build TreeExplainer instances for severity, congestion, law-and-order models."""
+    shap = _import_shap()
     return {
         "severity":  shap.TreeExplainer(severity_pipeline.named_steps["lgbm"]),
         "congestion": shap.TreeExplainer(risk_models["congestion"].named_steps["clf"]),
@@ -79,7 +87,7 @@ def _top5_drivers(sv: np.ndarray, feature_names: list) -> list[dict]:
 
 
 def explain_severity(
-    explainer: shap.TreeExplainer,
+    explainer: Any,
     severity_pipeline: Pipeline,
     features: dict,
     predicted_class: str,
@@ -113,7 +121,7 @@ def explain_severity(
 
 
 def explain_risk(
-    explainer: shap.TreeExplainer,
+    explainer: Any,
     risk_pipeline: Pipeline,
     features: dict,
 ) -> list[dict]:

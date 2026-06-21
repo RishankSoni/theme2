@@ -35,7 +35,7 @@ _LGBM_DEFAULTS: dict = {
     "min_child_samples": 20,
     "class_weight": "balanced",
     "random_state": 42,
-    "n_jobs": -1,
+    "n_jobs": 1,
     "verbose": -1,
     "categorical_feature": "auto",
 }
@@ -78,10 +78,30 @@ class CorridorStatsTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         out = X.copy()
         out = out.join(self.stats_, on="corridor", how="left")
-        out["corridor_high_rate"] = out["corridor_high_rate"].fillna(self.fallback_high_rate_)
-        out["corridor_event_count"] = out["corridor_event_count"].fillna(self.fallback_event_count_)
-        out["corridor_auth_rate"] = out["corridor_auth_rate"].fillna(self.fallback_auth_rate_)
-        out["corridor_closure_rate"] = out["corridor_closure_rate"].fillna(self.fallback_closure_rate_)
+        fallback_high = float(getattr(self, "fallback_high_rate_", 0.0))
+        fallback_count = float(getattr(self, "fallback_event_count_", 0.0))
+        fallback_auth = float(getattr(self, "fallback_auth_rate_", 0.5))
+        fallback_closure = float(getattr(self, "fallback_closure_rate_", 0.0))
+
+        if "corridor_high_rate" not in out.columns:
+            out["corridor_high_rate"] = fallback_high
+        else:
+            out["corridor_high_rate"] = out["corridor_high_rate"].fillna(fallback_high)
+
+        if "corridor_event_count" not in out.columns:
+            out["corridor_event_count"] = fallback_count
+        else:
+            out["corridor_event_count"] = out["corridor_event_count"].fillna(fallback_count)
+
+        if "corridor_auth_rate" not in out.columns:
+            out["corridor_auth_rate"] = fallback_auth
+        else:
+            out["corridor_auth_rate"] = out["corridor_auth_rate"].fillna(fallback_auth)
+
+        if "corridor_closure_rate" not in out.columns:
+            out["corridor_closure_rate"] = fallback_closure
+        else:
+            out["corridor_closure_rate"] = out["corridor_closure_rate"].fillna(fallback_closure)
         for col in CAT_COLS:
             out[col] = out[col].astype("category")
         return out
